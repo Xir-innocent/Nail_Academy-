@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nail Mastery Pro - Complete Technician Training</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #D4A5A5;
+            --primary-dark: #B88484;
+            --secondary: #F5E6E0;
+            --accent: #E8D5D0;
+            --text: #4A4A4A;
+            --text-light: #7A7A7A;
+            --white: #FFFFFF;
+            --success: #A8D5BA;
+            --warning: #F4D03F;
+            --bg-warm: #FDF8F6;
+            --shadow: rgba(212, 165, 165, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-warm);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Login Overlay */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .login-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .login-container {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px var(--shadow);
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+        }
+
+        .login-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(212, 165, 165, 0.1);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(184, 132, 132, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Main App Layout */
+        .app-container {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .app-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--white);
+            border-right: 1px solid var(--accent);
+            padding: 2rem;
+            overflow-y: auto;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--accent);
+        }
+
+        .brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand i {
+            font-size: 1.25rem;
+        }
+
+        .user-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--primary-dark);
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        .progress-overview {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .progress-percent {
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-warm);
+        }
+
+        .nav-item.active {
+            background: var(--secondary);
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            color: var(--primary);
+        }
+
+        .nav-item.active i {
+            color: var(--primary-dark);
+        }
+
+        .week-indicator {
+            margin-left: auto;
+            font-size: 0.75rem;
+            background: var(--white);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            color: var(--text-light);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem 3rem;
+            max-width: 1200px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--accent);
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--text);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-secondary {
+            padding: 0.75rem 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            color: var(--text);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: var(--bg-warm);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Dashboard Hero */
+        .dashboard-hero {
+            background: linear-gradient(135deg, var(--white) 0%, var(--secondary) 100%);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2.5rem;
+            border: 1px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-hero::after {
+            content: '✦';
+            position: absolute;
+            right: 2rem;
+            top: 2rem;
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.2;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--accent);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px var(--shadow);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Phase Cards */
+        .phases-container {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .phase-card {
+            background: var(--white);
+            border-radius: 20px;
+            border: 1px solid var(--accent);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .phase-card:hover {
+            box-shadow: 0 12px 32px var(--shadow);
+            transform: translateY(-2px);
+        }
+
+        .phase-header {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .phase-header:hover {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+        }
+
+        .phase-title-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .phase-number {
+            width: 48px;
+            height: 48px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 1.25rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .phase-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            color: var(--text);
+        }
+
+        .phase-meta {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        .phase-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--white);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .phase-status.completed {
+            background: var(--success);
+            color: #2d5a3d;
+        }
+
+        .phase-status.in-progress {
+            background: var(--warning);
+            color: #7a5c00;
+        }
+
+        .phase-content {
+            padding: 2rem;
+            display: none;
+        }
+
+        .phase-content.expanded {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-block {
+            margin-bottom: 2rem;
+        }
+
+        .content-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .block-title {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .block-title i {
+            color: var(--primary);
+        }
+
+        .course-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-bottom: 1rem;
+        }
+
+        .course-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(184, 132, 132, 0.3);
+        }
+
+        .focus-list {
+            list-style: none;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .focus-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--bg-warm);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .focus-list li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .practice-schedule {
+            background: var(--bg-warm);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--accent);
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .day-card {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--accent);
+            transition: all 0.2s ease;
+        }
+
+        .day-card:hover {
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .day-number {
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .day-task {
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        /* Video Resources Section */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .video-card {
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--accent);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px var(--shadow);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            height: 180px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-thumbnail i {
+            font-size: 3rem;
+            color: var(--primary-dark);
+            opacity: 0.8;
+            transition: transform 0.2s ease;
+        }
+
+        .video-card:hover .video-thumbnail i {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .video-info {
+            padding: 1.25rem;
+        }
+
+        .video-title {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .video-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Professional Tips Section */
+        .tips-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--accent);
+        }
+
+        .tip-card {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--accent);
+            transition: background 0.2s ease;
+        }
+
+        .tip-card:last-child {
+            border-bottom: none;
+        }
+
+        .tip-card:hover {
+            background: var(--bg-warm);
+            border-radius: 12px;
+        }
+
+        .tip-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .tip-icon i {
+            color: var(--primary-dark);
+            font-size: 1.25rem;
+        }
+
+         .tip-content h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .tip-content p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 101;
+            background: var(--white);
+            border: 1px solid var(--accent);
+            padding: 0.75rem;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .hero-title {
+                font-size: 1.75rem;
+            }
+
+            .dashboard-hero {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .phase-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .schedule-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Checkboxes for progress tracking */
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            padding: 0.5rem 0;
+        }
+
+        .check-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .check-item.checked {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--secondary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--primary-dark);
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge i {
+            color: var(--primary);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--success);
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .notification.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login Overlay -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-container">
+            <div class="login-logo">✦ Nail Mastery Pro</div>
+            <div class="login-subtitle">Professional Nail Technician Training Portal</div>
+            
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="student@nailmastery.com" value="student@nailmastery.com">
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Access Code</label>
+                <input type="password" id="password" placeholder="Enter your course access code" value="nailtech2024">
+            </div>
+            
+            <button class="btn-primary" onclick="login()">
+                <i class="fas fa-lock"></i> Access Course Materials
+            </button>
+            
+            <div style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-light);">
+                <i class="fas fa-info-circle"></i> For enrolled students only
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div class="app-container" id="appContainer">
+        <!-- Mobile Toggle -->
+        <button class="mobile-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-section">
+                <div class="brand">
+                    <i class="fas fa-sparkles"></i>
+                    <span>Nail Mastery Pro</span>
+                </div>
+                <div class="user-badge">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>Premium Student</span>
+                </div>
+            </div>
+
+            <div class="progress-overview">
+                <div class="progress-header">
+                    <span class="progress-title">Course Progress</span>
+                    <span class="progress-percent" id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-light);">
+                    <span id="completedDays">0</span>/30 days completed
+                </div>
+            </div>
+
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-title">Learning Path</div>
+                    <a href="#" class="nav-item active" onclick="showSection('dashboard', this)">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="showSection('curriculum', this)">
+                        <i class="fas fa-book-open"></i>
+                        <span>Curriculum</span>
+                        <span class="week-indicator">4 Weeks</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="showSection('videos', this)">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Video Training</span>
+                        <span class="week-indicator">4 Videos</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="showSection('professional', this)">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Pro Tips</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-title">Resources</div>
+                    <a href="#" class="nav-item" onclick="showNotification('Certificate available after completion')">
+                        <i class="fas fa-certificate"></i>
+                        <span>Certificate</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="showNotification('Community access coming soon')">
+                        <i class="fas fa-users"></i>
+                        <span>Community</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="showNotification('Support team notified')">
+                        <i class="fas fa-headset"></i>
+                        <span>Support</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div style="margin-top: auto; padding-top: 2rem; border-top: 1px solid var(--accent);">
+                <button class="btn-secondary" style="width: 100%;" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <div class="content-section active" id="dashboard">
+                <div class="header">
+                    <div>
+                        <h1 class="page-title">Welcome Back, Future Nail Pro</h1>
+                        <p style="color: var(--text-light); margin-top: 0.5rem;">Continue your journey to becoming a certified nail technician</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-secondary" onclick="showNotification('Daily reminder set!')">
+                            <i class="fas fa-bell"></i> Reminders
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dashboard-hero">
+                    <h2 class="hero-title">30 Days to Professional Certification</h2>
+                    <p class="hero-subtitle">Master the art of nail technology through our structured, hands-on training program designed by industry experts.</p>
+                    
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <span class="badge"><i class="fas fa-check-circle"></i> Beginner Friendly</span>
+                        <span class="badge"><i class="fas fa-video"></i> HD Video Training</span>
+                        <span class="badge"><i class="fas fa-award"></i> Certificate Included</span>
+                        <span class="badge"><i class="fas fa-infinity"></i> Lifetime Access</span>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="statDays">30</div>
+                            <div class="stat-label">Training Days</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">4</div>
+                            <div class="stat-label">Core Phases</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">12+</div>
+                            <div class="stat-label">Video Modules</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="statRemaining">30</div>
+                            <div class="stat-label">Days Remaining</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: var(--white); border-radius: 20px; padding: 2rem; border: 1px solid var(--accent);">
+                    <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1.5rem; color: var(--text);">Quick Actions</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <button class="btn-secondary" style="justify-content: center;" onclick="showSection('curriculum', document.querySelectorAll('.nav-item')[1])">
+                            <i class="fas fa-play"></i> Continue Learning
+                        </button>
+                        <button class="btn-secondary" style="justify-content: center;" onclick="showSection('videos', document.querySelectorAll('.nav-item')[2])">
+                            <i class="fas fa-video"></i> Watch Tutorials
+                        </button>
+                        <button class="btn-secondary" style="justify-content: center;" onclick="showNotification('Practice log opened')">
+                            <i class="fas fa-camera"></i> Upload Work
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Curriculum Section -->
+            <div class="content-section" id="curriculum">
+                <div class="header">
+                    <div>
+                        <h1 class="page-title">Training Curriculum</h1>
+                        <p style="color: var(--text-light); margin-top: 0.5rem;">Complete 30-day structured learning path</p>
+                    </div>
+                </div>
+
+                <div class="phases-container">
+                    <!-- Phase 1 -->
+                    <div class="phase-card">
+                        <div class="phase-header" onclick="togglePhase(this)">
+                            <div class="phase-title-group">
+                                <div class="phase-number">1</div>
+                                <div>
+                                    <div class="phase-title">Foundation Week</div>
+                                    <div class="phase-meta">Hygiene & Nail Prep • Days 1-7</div>
+                                </div>
+                            </div>
+                            <div class="phase-status" id="status-1">Not Started</div>
+                        </div>
+                        <div class="phase-content">
+                            <div class="content-block">
+                                <div class="block-title"><i class="fas fa-graduation-cap"></i> Core Course</div>
+                                <a href="https://alison.com/course/professional-nail-care-and-treatment" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    Access Alison Course: Professional Nail Care & Treatment
+                                </a>
+                                <p style="color: var(--text-light); font-size: 0.95rem; margin-top: 0.5rem;">Complete this foundational certification course covering sanitation, anatomy, and basic care.</p>
+                            </div>
+
+                            <div class="content-block">
+                                <div class="block-title"><i class="fas fa-bullseye"></i> Key Focus Areas</div>
+                                <ul class="focus-list">
+                                    <li>Nail Anatomy & Physiology</li>
+                                    <li>Sanitation & Disinfection Protocols</li>
+                                    <li>Professional Nail Shaping Techniques</li>
+                                    <li>Tool Sterilization Methods</li>
+                                </ul>
+                            </div>
+
+                            <div class="content-block">
+                                <div class="block-title"><i class="fas fa-calendar-check"></i> Daily Practice Schedule</div>
+                                <div class="practice-schedule">
+                                    <div class="schedule-grid">
+                                        <div class="day-card">
+                                            <div class="day-number">Days 1-2</div>
+                                            <div class="day-task">Study hygiene protocols & disinfect all tools</div>
+                                            <label class="check-item" style="margin-top: 0.5rem;">
+                                                <input type="checkbox" onchange="updateProgress()"> Mark Complete
+                                            </label>
+                                        </div>
+                                        <div class="day-card">
+                                            <div class="day-number">Days 3-4</div>
+                                            <div class="day-task">Practice nail filing & shaping techniques</div>
+                                            <label class="check-item" style="margin-top: 0.5rem;">
+                                                <input type="checkbox" onchange="updateProgress()"> Mark Complete
+                                            </label>
+                                        </div>
+                                        <div class="day-card">
+                                            <div class="day-number">Days 5-6</div>
+                                            <div class="day-task">Master cuticle care & prep work</div>
+                                            <label class="check-item" style="margin-top: 0.5rem;">
+                                                <input type="checkbox" onchange="updateProgress()"> Mark Complete
+                                            </label>
+                                        </div>
+                                        <div class="day-card" style="border: 2px solid var(--primary);">
+                                            <div class="day-number">Day 7</div>
+                                            <div class="day-task"><strong>Assessment:</strong> Full manicure on a live model</div>
+                                            <label class="check-item" style="margin-top: 0.5rem;">
+                                                <input type="checkbox" onchange="updateProgress()"> Mark Complete
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 2 -->
+                    <div class="phase-card">
+                        <div class="phase-header" onclick="togglePhase(this)">
+                            <div class="phase-title-group">
+                                <div class="phase-number">2</div>
+                                <div>
+                                    <div class="phase-title">Application & Polish</div>
+                                    <div class="phase-meta">Color Theory & Design • Days 8-14</div>
+                                </div>
+                            </div>
+                            <div class="phase-status" id="status-2">Not Started</div>
+                        </div>
+                        <div class="phase-content">
+                            <div class="content-block">
+                                <div class="block-title"><i class="fas fa-graduation-cap"></i> Core Course</div>
+                                <a href="https://alison.com/course/gel-manicure-and-nail-artistry" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    Access Alison Course: Gel Manicure & Nail Artistry
+                                </a>
+                            </div>
+
+                            <div class="content-block">
+                                <div class="block-title"><i class="fas fa-paint-brush"></i> Practical Skills</div>
+                                <ul class="focus-list">
+                                    <li>Base coat, color & top coat application</li>
+                                    <li>Cuticle flooding prevention techniques</li>
+                                    <li>Simple nail art & design fundamentals</li>
+                                    <li>Polish correction & cleanup methods</li>
+                                </ul>
+                            </div>
+
+                            <div class="content-block">
+                                <div class="block-title"><i class="fas fa-calendar-check"></i> Week 2 Schedule</div>
+                                <div class="practice-schedule">
+                                    <div class="schedule-grid">
+                                        <div class="day-card">
+                                            <div class="day-number">Days 8-10</div>
+                                            <div class="day-task">Practice polish application on practice fingers</div>
+                                            <label class="check-item" style="margin-top: 0.5rem;">
+                                                <input type="checkbox" onchange="updateProgress()"> Mark Complete
+                                            </label>
+                                        </div>
+                                        <div class="day-card">
+                                            <div class="day-number">Days 11-13</div>
+                                            <div class="day-task">Learn basic nail art: dots, lines, french tips</div>
+                                            <label class="check-item" style="margin-top: 0.5rem;">
+                                                <input type="checkbox" onchange="updateProgress()"> Mark Complete
+                                            </label>
+                                        </div>
+                                        <div class="day-card" style="border: 2px solid var(--primary); grid-column: span 2;">
+                                            <div class="day-number">Day 14</div>
+                                            <div class="day-task"><strong>Final Assessment:</strong> Complete manicure + polish on a client</div>
+                                            <label class="check-item" style="margin-top: 0.5rem;">
+                                                <input type="checkbox" onchange="updateProgress()"> Mark Complete
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 3 -->
+                    <div class="phase-card">
+                        <div class="phase-header" onclick="togglePhase(this)">
+                            <div class="phase-title-group">
+                                <div class="phase-number">3</div>
+                                <div>
+                                    <div class="phase-title">Gel & Acrylic Mastery</div>
+                                    <div class="phase-meta">Advanced Techniques • Days 15-21</div>
+                                </div>
+                            </div>
+                            <div class="phase-status" id="status-3">Not Started</div>
+                        </div>
+                        <div class="phase-content">
+                            <div class="content-block">
+                                <div class="block-title"><i class="fas fa-graduation-cap"></i> Core Course</div>
+                                <a href="https://cursa.app/en/free-course/beginner-nail-tech-efei" target="_blank" class="course-link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    Access Cursa Course: Beginner Nail Tech (EFEI)
+                                </a>
+                                <p style="color: var(--text-light); font-size: 0.95rem; margin-top: 0.5rem;">Advanced certification covering money-making nail services.</p>
+                            </div>
+
+                            <div class="content-block">
+                                <div class="block-title"><i class="fas fa-gem"></i> High-Value Skills</div>
+                                <ul class="focus-list">
+                                    <li>Gel polish application & curing</li>
+                                    <li>Acrylic powder ratio & consistency</li>
+                                    <li>Nail extension techniques (tips & forms)</li>
+                                    <li>Sculpting & filing perfect arches</li>
+                                </ul>
+                            </div>
+
+                            <div class="content-block">
+                                <div class="block-title"><i class="fas fa-calendar-check"></i> Week 3 Schedule</div>
+                                <div class="practice-schedule">
+                                    <div class="schedule-grid">
+                                        <div class="day-card">
+                                            <div class="day-number">Days 15-17</div>
+                                            <div class="day-task">Master gel polish: prep, application, curing</div>
+                                            <label class="check-item" style="margin-top: 0.5rem;">
+                                                <input type="checkbox" onchange="updateProgress()"> Mark Complete
+                                            </label>
+                                        </div>
+                                        <div class="day-card">
+                                            <div class="day-number">Days 18-20</div>
+                                            <div class="day-task">Acrylic basics: beads, application, shaping</div>
+                                            <label class="check-item" style="margin-top: 0.5rem;">
+                                                <input type="checkbox" onchange="updateProgress()"> Mark Complete
+                                            </label>
+                                        </div>
+                                        <div class="day-card" style="border: 2px solid var(--primary); grid-column: span 2;">
+                                            <div class="day-number">Day 21</div>
+                                            <div class="day-task"><strong>Portfolio Piece:</strong> Complete a simple gel set with nail art</div>
+                                            <label class="check-item" style="margin-top: 0.5rem;">
+                                                <input type="checkbox" onchange="updateProgress()"> Mark Complete
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 4 -->
+                    <div class="phase-card">
+                        <div class="phase-header" onclick="togglePhase(this)">
+                            <div class="phase-title-group">
+                                <div class="phase-number">4</div>
+                                <div>
+                                    <div class="phase-title">Speed & Client Readiness</div>
+                                    <div class="phase-meta">Professional Standards • Days 22-30</div>
+                                </div>
+                            </div>
+                            <div class="phase-status" id="status-4">Not Started</div>
+                        </div>
+                        <div class="phase-content">
+                            <div class="content-block">
+                                <div class="block-title"><i class="fas fa-rocket"></i> Professional Development</div>
+                                <ul class="focus-list">
+                                    <li>Timing your services (Manicure: 45min, Full set: 90min)</li>
+                                    <li>Client consultation & communication</li>
+                                    <li>Building your portfolio & social media presence</li>
+                                    <li>Pricing strategies & business basics</li>
+                                </ul>
+                            </div>
+
+                            <div class="content-block">
+                                <div class="block-title"><i class="fas fa-calendar-check"></i> Final Week Schedule</div>
+                                <div class="practice-schedule">
+                                    <div class="schedule-grid">
+                                        <div class="day-card">
+                                            <div class="day-number">Days 22-25</div>
+                                            <div class="day-task">Speed drills: Time every service, improve efficiency</div>
+                                            <label class="check-item" style="margin-top: 0.5rem;">
+                                                <input type="checkbox" onchange="updateProgress()"> Mark Complete
+                                            </label>
+                                        </div>
+                                        <div class="day-card">
+                                            <div class="day-number">Days 26-28</div>
+                                            <div class="day-task">Work on 3+ different people, gather feedback</div>
+                                            <label class="check-item" style="margin-top: 0.5rem;">
+                                                <input type="checkbox" onchange="updateProgress()"> Mark Complete
+                                            </label>
+                                        </div>
+                                        <div class="day-card" style="border: 2px solid var(--success); background: rgba(168, 213, 186, 0.1);">
+                                            <div class="day-number">Days 29-30</div>
+                                            <div class="day-task"><strong>LAUNCH:</strong> Start offering paid services!</div>
+                                            <label class="check-item" style="margin-top: 0.5rem;">
+                                                <input type="checkbox" onchange="updateProgress()"> Mark Complete
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="content-block" style="background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%); padding: 1.5rem; border-radius: 16px; margin-top: 1rem;">
+                                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-trophy" style="font-size: 1.5rem; color: var(--primary-dark);"></i>
+                                    <h3 style="font-family: 'Playfair Display', serif; color: var(--text);">Graduation Ready!</h3>
+                                </div>
+                                <p style="color: var(--text);">Complete all checkpoints above to unlock your certificate and start your professional nail technician career.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Videos Section -->
+            <div class="content-section" id="videos">
+                <div class="header">
+                    <div>
+                        <h1 class="page-title">Practical Video Training</h1>
+                        <p style="color: var(--text-light); margin-top: 0.5rem;">Visual demonstrations by industry professionals</p>
+                    </div>
+                </div>
+
+                <div class="video-grid">
+                    <div class="video-card" onclick="window.open('https://www.youtube.com/watch?v=9l9G9G7l0VQ', '_blank')">
+                        <div class="video-thumbnail">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="video-duration">15:30</span>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">Professional Nail Prep Standards</div>
+                            <div class="video-desc">Learn the industry-standard preparation techniques that ensure long-lasting manicures and client safety.</div>
+                        </div>
+                    </div>
+
+                    <div class="video-card" onclick="window.open('https://www.youtube.com/watch?v=ZQ1k3hR0z3E', '_blank')">
+                        <div class="video-thumbnail">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="video-duration">22:45</span>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">Acrylic Application Mastery</div>
+                            <div class="video-desc">Step-by-step guide to perfect bead pickup, application, and sculpting beautiful nail extensions.</div>
+                        </div>
+                    </div>
+
+                    <div class="video-card" onclick="window.open('https://www.youtube.com/watch?v=Kk9GZ5tFqkQ', '_blank')">
+                        <div class="video-thumbnail">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="video-duration">18:20</span>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">Gel Polish Perfection</div>
+                            <div class="video-desc">Avoid common mistakes with proper curing times, cuticle sealing, and achieving that glass-like finish.</div>
+                        </div>
+                    </div>
+
+                    <div class="video-card" onclick="window.open('https://www.youtube.com/watch?v=6x6wZl3LZpY', '_blank')">
+                        <div class="video-thumbnail">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="video-duration">12:15</span>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">Nail Shaping Guide</div>
+                            <div class="video-desc">Master all popular shapes: Square, Round, Oval, Almond, Stiletto, and Coffin/Ballerina.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; background: var(--white); border-radius: 16px; padding: 1.5rem; border: 1px solid var(--accent);">
+                    <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1rem; color: var(--text);">
+                        <i class="fas fa-lightbulb" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                        Video Learning Tips
+                    </h3>
+                    <ul style="list-style: none; display: grid; gap: 0.75rem; color: var(--text-light);">
+                        <li style="display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-check" style="color: var(--success);"></i>
+                            Watch once for overview, then follow along with your tools
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-check" style="color: var(--success);"></i>
+                            Pause and rewind technique demonstrations until mastered
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-check" style="color: var(--success);"></i>
+                            Film your own practice to compare with instructor techniques
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Professional Tips Section -->
+            <div class="content-section" id="professional">
+                <div class="header">
+                    <div>
+                        <h1 class="page-title">Professional Development</h1>
+                        <p style="color: var(--text-light); margin-top: 0.5rem;">Essential habits for a successful nail career</p>
+                    </div>
+                </div>
+
+                <div class="tips-container">
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-pump-medical"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h3>Always Maintain Hygiene</h3>
+                            <p>Your reputation depends on cleanliness. Sterilize tools between every client, use fresh files, and maintain a spotless workstation. Health inspections can happen anytime—be ready.</p>
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h3>Communicate Clearly with Clients</h3>
+                            <p>Conduct thorough consultations. Ask about allergies, previous nail damage, and lifestyle (typing, sports). Set realistic expectations about nail art complexity and durability.</p>
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h3>Document All Your Work</h3>
+                            <p>Take before/after photos of every service in consistent lighting. Build an Instagram portfolio before you need it. Good photography attracts high-paying clients.</p>
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h3>Improve Speed Gradually</h3>
+                            <p>Speed comes with muscle memory, not rushing. Time yourself weekly but prioritize quality. A perfect 90-minute set is better than a sloppy 60-minute one. Speed will follow.</p>
+                        </div>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-book-reader"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h3>Keep Learning New Designs</h3>
+                            <p>Trends change rapidly (chrome, cat-eye, 3D art). Dedicate 30 minutes weekly to learning new techniques. Follow international nail artists for inspiration.</p>
+                        </div>
+                    </div>
+
+                    <div class="tip-card" style="background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%); border-radius: 12px; margin-top: 1rem;">
+                        <div class="tip-icon" style="background: var(--white);">
+                            <i class="fas fa-star" style="color: var(--primary-dark);"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h3>Pro Tip: The 15-Minute Rule</h3>
+                            <p>Never let a client leave without booking their next appointment. Nail growth is predictable—use that to build a steady clientele. Offer a small discount for pre-booking to secure your schedule.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.25rem;"></i>
+        <span id="notificationText">Action completed successfully</span>
+    </div>
+
+    <script>
+        // Login Functionality
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (email && password) {
+                document.getElementById('loginOverlay').classList.add('hidden');
+                document.getElementById('appContainer').classList.add('active');
+                showNotification('Welcome back! Continue your training.');
+                updateProgress();
+            } else {
+                alert('Please enter both email and access code');
+            }
+        }
+
+        function logout() {
+            document.getElementById('loginOverlay').classList.remove('hidden');
+            document.getElementById('appContainer').classList.remove('active');
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // Navigation
+        function showSection(sectionId, navElement) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show target section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update nav active state
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            if (navElement) {
+                navElement.classList.add('active');
+            }
+            
+            // Close mobile sidebar
+            if (window.innerWidth <= 1024) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Phase Accordion
+        function togglePhase(header) {
+            const content = header.nextElementSibling;
+            const isExpanded = content.classList.contains('expanded');
+            
+            // Close all other phases
+            document.querySelectorAll('.phase-content').forEach(phase => {
+                phase.classList.remove('expanded');
+            });
+            
+            // Toggle current
+            if (!isExpanded) {
+                content.classList.add('expanded');
+            }
+            
+            // Update status based on checkboxes
+            updatePhaseStatus(header.parentElement);
+        }
+
+        // Progress Tracking
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+            const percent = Math.round((checked.length / checkboxes.length) * 100);
+            
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('completedDays').textContent = checked.length;
+            document.getElementById('statRemaining').textContent = 30 - checked.length;
+            
+            // Update phase statuses
+            document.querySelectorAll('.phase-card').forEach((card, index) => {
+                updatePhaseStatus(card);
+            });
+            
+            // Check completion
+            if (percent === 100) {
+                showNotification('🎉 Congratulations! Course completed!');
+            }
+        }
+
+        function updatePhaseStatus(card) {
+            const checkboxes = card.querySelectorAll('input[type="checkbox"]');
+            const checked = card.querySelectorAll('input[type="checkbox"]:checked');
+            const statusEl = card.querySelector('.phase-status');
+            
+            if (checkboxes.length === 0) return;
+            
+            if (checked.length === checkboxes.length) {
+                statusEl.textContent = 'Completed';
+                statusEl.className = 'phase-status completed';
+            } else if (checked.length > 0) {
+                statusEl.textContent = 'In Progress';
+                statusEl.className = 'phase-status in-progress';
+            } else {
+                statusEl.textContent = 'Not Started';
+                statusEl.className = 'phase-status';
+            }
+        }
+
+        // Notification System
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notificationText');
+            text.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for saved progress (simulated)
+            updateProgress();
+            
+            // Enter key on login
+            document.getElementById('password').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') login();
+            });
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+            
+            if (window.innerWidth <= 1024 && 
+                !sidebar.contains(e.target) && 
+                !toggle.contains(e.target) && 
+                sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>
